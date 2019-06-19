@@ -1,9 +1,7 @@
-#2bRAD de novo AND reference-based walkthrough
-#June 2018
+#Analysis of 2brad data on corals from French Polynesia
+#June 2019
 #Mikhail Matz (matz@utexas.edu) - ask me if anything does not work
 #edits by Nicola Kriefall for BU's cluster (thenicolakriefall@gmail.com)
-
-#test -going to commit this to my github
 
 #=============================================
 
@@ -35,139 +33,6 @@ module load gatk
 #stairway plot?
 #popgentools
 #bayescan?
-
-==============================================
-
-# downloading and installing all 2bRAD scripts in $HOME/bin (or change to whatever directory you want)
-cd
-mkdir bin 
-cd ~/bin 
-# cloning github repositories
-git clone https://github.com/z0on/2bRAD_denovo.git
-git clone https://github.com/z0on/2bRAD_GATK.git
-# move scripts to ~/bin from sub-directories
-mv 2bRAD_GATK/* . 
-mv 2bRAD_denovo/* . 
-# remove now-empty directory
-rm -rf 2bRAD_denovo 
-rm -rf 2bRAD_GATK 
-
-# designating all .pl and .py files (perl and python scripts) as executable
-chmod +x *.pl 
-chmod +x *.py
-chmod +x *.R
-
-# adding ~/bin to your $PATH 
-cd
-nano .bashrc
-# paste this where appropriate (note: .bashrc configuration might be specific to your cluster, consult your sysadmin if in doubt)
-   export PATH=$HOME/bin:$PATH
-
-source .bashrc
-
-# does it work?
-# try running a script from $HOME:
-cd
-2bRAD_trim_launch.pl
-# if you get "command not found" something is wrong 
-
-# ==============================================
-#      Genome reference placement (if you have it)
-
-# will need bowtie2, samtools, and picard. They are pre-installed as modules on BU's SCC; you will have to install them if you don't have these modules on your cluster. 
-module load perl
-module load bowtie2
-module load samtools
-module load picard
-
-# assuming we have a fasta file mygenome.fasta and it lives in the directory $WORK/db
-
-export GENOME_FASTA=$WORK/db/mygenome.fasta
-export GENOME_DICT=$WORK/db/mygenome.dict 
-
-# indexing genome for bowtie2 mapper
-bowtie2-build $GENOME_FASTA $GENOME_FASTA
-
-samtools faidx $GENOME_FASTA
-
-export GENOME_DICT=$WORK/db/mygenome.dict 
-java -jar $TACC_PICARD_T_DIR/picard.jar CreateSequenceDictionary R=$GENOME_FASTA  O=$GENOME_DICT
-
-#==================
-# Step 1: Splitting by in-read barcode, deduplicating and quality-filtering the reads
-
-# creating a file of commands to run (assuming reads are in fastq files, one file per sample.
-# (if samples were spread across several lanes, concatenate them first using 
-ngs_concat.pl) 
-2bRAD_trim_launch_dedup.pl fastq > trims
-
-# Note: use this command instead of the one above if you have 2bRAD libraries without degenerate tag but with 4-base in-line barcode:
-2bRAD_trim_launch.pl fastq barcode2=4 > trims
-# And if you have the original-style libraries without degenerate tag and without in-line barcode, use this:
-2bRAD_trim_launch.pl fastq > trims
-# AND IF you sequenced your double-barcoded, deduplicatable libraries on HiSeq 4000 alone
-# (resulting in poor quality at restriction site and adaptor bases) and you have used BcgI enzyme, use this:
-2bRAD_trim_launch_dedup2.pl fastq > trims
-
-# the file trims now contains a long list of commands, one per fastq file, that we will need to execute. TACC uses Launcher module to enable parallele launch of multiple commands: https://github.com/TACC/launcher 
-# I very highly recommend it - it should work on any SLURM-based system. Otherwise, if you don't know how to run hundreds of parallel jobs on your cluster, consult your IT support - there must be a way. 
-# If push comes to shove, you can always execute all these commands serially (one by one), by saying 
-bash trims
-
-# do we have expected number of *.tr0 files created?
-ls -l *.tr0 | wc -l
-
-# quality filtering using fastx_toolkit (install fastx_toolkit if you don't have this module)
-module load fastx_toolkit
-ls *.tr0 | perl -pe 's/^(\S+)\.tr0$/cat $1\.tr0 \| fastq_quality_filter -q 20 -p 100 >$1\.trim/' >filt0
-
-# NOTE: run the next line ONLY if your qualities are 33-based 
-# (if you don't know just try to see if it works eventually, if you get errors from fastx_toolkit, try the other one):
-	cat filt0 | perl -pe 's/filter /filter -Q33 /' > filt
-#if you did NOT run the line above, run this one (after removing # symbol):
-#	mv filt0 filt
-
-# execute all commands in filt file (serial or parallel using Launcher, if your system allows) 
-
-# do we have expected number of *.trim files created?
-ls -l *.trim | wc -l
-
-#==============
-# Mapping reads to reference (reads-derived fake one, or real) and formatting bam files 
-
-# for denovo: map reads to fake genome with bowtie2: 
-GENOME_FASTA=cdh_alltags_cc.fasta
->maps
-for F in `ls *.trim`; do
-echo "bowtie2 --no-unal -x $GENOME_FASTA -U $F -S $F.sam">>maps
-done
-
-# for reference-based: mapping with --local option, enables clipping of mismatching ends (guards against deletions near ends of RAD tags)
-GENOME_FASTA=mygenome.fasta
-2bRAD_bowtie2_launch.pl '\.trim$' $GENOME_FASTA > maps
-
-# execute all commands written to maps...
-
->alignmentRates
-for F in `ls *trim`; do 
-M=`grep -E '^[ATGCN]+$' $F | wc -l | grep -f - maps.e* -A 4 | tail -1 | perl -pe 's/maps\.e\d+-|% overall alignment rate//g'` ;
-echo "$F.sam $M">>alignmentRates;
-done
-
-ls *.sam > sams
-cat sams | wc -l  # number should match number of trim files
-
-# next stage is compressing, sorting and indexing the SAM files, so they become BAM files:
-module load samtools
->s2b
-for file in *.sam; do
-echo "samtools sort -O bam -o ${file/.sam/}.bam $file && samtools index ${file/.sam/}.bam">>s2b;
-done
-
-# run all commands listed in s2b file
-ls *bam | wc -l  # should be the same number as number of trim files
-
-# BAM files are the input into various genotype calling / popgen programs, this is the main interim result of the analysis. Archive them.
 
 #===================== A  N  G  S  D =====================
 
@@ -213,6 +78,10 @@ cat qranks
 FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 93 -snp_pval 1e-5 -minMaf 0.05 -minIndDepth 13"
 TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2"
 
+#run2 - adding back hwe filter to see if it changes anything
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 93 -snp_pval 1e-5 -minMaf 0.05 -minIndDepth 13 -hwe_pval 1e-5"
+TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2"
+
 #defaults
 FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 1000 -snp_pval 1e-5 -minMaf 0.05"
 TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2"
@@ -239,8 +108,6 @@ NS=`zcat run1.geno.gz | wc -l`
 NB=`cat bamscl | wc -l`
 zcat run1.mafs.gz | tail -n +2 | cut -f 1,2 > r1.sites
 ngsLD --geno run1.geno.gz --probs 1 --n_ind $NB --n_sites $NS --max_kb_dist 0 --pos r1.sites --out run1.LD --n_threads 12 --extend_out 1
-
-
 
 # NgsAdmix for K from 2 to 5 : do not run if the dataset contains clones or genotyping replicates!
 for K in `seq 2 5` ; 

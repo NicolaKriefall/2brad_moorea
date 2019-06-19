@@ -1,0 +1,67 @@
+setwd('~/Desktop/depth/')
+library(vcfR)
+library(adegenet)
+library(vegan) 
+
+gl=vcfR2genlight(read.vcfR("mr_strict.vcf"))
+
+pops=read.table("mrstrict_pops_year.txt",sep="\t")
+#pops=read.table("~/Desktop/moorea/pops_allcl_site.txt",sep="\t")
+
+pop(gl)=pops$V2
+pca=glPca(gl,nf=3,parallel=F)
+
+quartz()
+plot(pca$scores[,1:2],col=transp(as.numeric(as.factor(pop(gl))),0.3),pch=19)
+ordispider(pca$scores[,1:2],pop(gl),col=as.numeric(as.factor(pop(gl))),label=T)
+ordiellipse(pca$scores[,1:2],pops$V2,label=T,draw="polygon",col="grey90")
+
+scatter(pca)
+pca
+loadingplot(pca,thres=0.0001)
+these <- loadingplot(pca, thres=0.0001)
+bad <- these$var.idx
+bad2 <- as.data.frame(bad)
+baddy <- bad2$bad
+baddy
+write.csv(baddy,"~/Desktop/strict/bads",row.names=F)
+
+#gl@loc.names
+#gl@loc.names[10000]
+#bad[,1]
+#bad2[37,]
+
+#path = "~/Documents/My Data/BRAZIL/Elections/"
+#out.file<-""
+#file.names <- dir(path, pattern =".txt")
+for(i in bad2){
+badz <- gl@loc.names[i]
+}
+str(badz)
+baddf <- as.data.frame(badz)
+write.csv(baddf,"~/Desktop/depth/baddf.csv")
+badz
+#removed these from vcf file
+
+gl=vcfR2genlight(read.vcfR("mrstrict_check.recode.vcf"))
+
+pops=read.table("mrstrict_pops_year.txt",sep="\t")
+#pops=read.table("mrstrict_pops_site.txt",sep="\t")
+
+pop(gl)=pops$V2
+pca=glPca(gl,nf=3,parallel=F)
+
+quartz()
+plot(pca$scores[,1:2],col=transp(as.numeric(as.factor(pop(gl))),0.3),pch=19)
+ordispider(pca$scores[,1:2],pop(gl),col=as.numeric(as.factor(pop(gl))),label=T)
+ordiellipse(pca$scores[,1:2],pops$V2,label=T,draw="polygon",col="grey90")
+
+#comparing the good & bad snps:
+goods <- read.table("good.idepth",header=TRUE)
+bads <- read.table("bad.idepth",header=TRUE)
+goods$good_depth <- goods$MEAN_DEPTH
+bads$bad_depth <- bads$MEAN_DEPTH
+new <- merge(goods,bads,by.x="INDV",by.y="INDV")
+str(new)
+plot(good_depth~INDV,data=new)
+summarySE()
