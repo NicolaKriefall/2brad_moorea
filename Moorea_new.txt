@@ -74,12 +74,8 @@ cat qranks
 # if you expect very highly differentiated populations with nearly fixed alternative alleles, remove '-hwe_pval 1e-5' form FILTERS
 # -doGeno 8 : genotype likelihood format setting for ngsLD; if you want to run PCA, use -doGeno 32 (but I recommend using ibsMat for all ordination work)
 
-#run1
-FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 93 -snp_pval 1e-5 -minMaf 0.05 -minIndDepth 13"
-TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2"
-
-#run2 - adding back hwe filter to see if it changes anything
-FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 93 -snp_pval 1e-5 -minMaf 0.05 -minIndDepth 13 -hwe_pval 1e-5"
+#run4 - changing min depth to 5 & seeing what happens
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 93 -snp_pval 1e-5 -minMaf 0.1 -minIndDepth 5 -hwe_pval 1e-5"
 TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2"
 
 #defaults
@@ -89,16 +85,18 @@ TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGe
 # Starting angsd with -P the number of parallel processes. Funny but in many cases angsd runs faster on -P 1
 #!/bin/bash -l
 #$ -V # inherit the submission environment
-#$ -cwd # start job in submission directory
-#$ -N run1 # job name, anything you want
+#$ -cwd #start job in submission directory
+#$ -N notah.sh # job name, anything you want
 #$ -l h_rt=24:00:00
 #$ -M thenicolakriefall@gmail.com
 #$ -m be
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 57 -snp_pval 1e-5 -minMaf 0.1 -minIndDepth 5 -hwe_pval 1e-5"
+TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2"
 
-angsd -b bamscl -GL 1 $FILTERS $TODO -P 1 -out run1
+angsd -b bamscl -GL 1 $FILTERS $TODO -P 1 -out notah
 
 # how many SNPs?
-NSITES=`zcat myresult.mafs.gz | wc -l`
+NSITES=`zcat run3.mafs.gz | wc -l`
 echo $NSITES
 
 # LD: (use rEM for WGCNA, to look for signatures of polygenic selection):

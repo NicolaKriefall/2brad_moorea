@@ -1,11 +1,11 @@
-setwd('~/Desktop/depth/')
+setwd('~/Google Drive/Moorea/2brad_moorea/')
 library(vcfR)
 library(adegenet)
 library(vegan) 
 
-gl=vcfR2genlight(read.vcfR("mr_strict.vcf"))
+gl=vcfR2genlight(read.vcfR("run2.vcf"))
 
-pops=read.table("mrstrict_pops_year.txt",sep="\t")
+pops=read.table("bamscl_year.txt",sep="\t")
 #pops=read.table("~/Desktop/moorea/pops_allcl_site.txt",sep="\t")
 
 pop(gl)=pops$V2
@@ -16,15 +16,15 @@ plot(pca$scores[,1:2],col=transp(as.numeric(as.factor(pop(gl))),0.3),pch=19)
 ordispider(pca$scores[,1:2],pop(gl),col=as.numeric(as.factor(pop(gl))),label=T)
 ordiellipse(pca$scores[,1:2],pops$V2,label=T,draw="polygon",col="grey90")
 
-scatter(pca)
-pca
-loadingplot(pca,thres=0.0001)
-these <- loadingplot(pca, thres=0.0001)
-bad <- these$var.idx
-bad2 <- as.data.frame(bad)
-baddy <- bad2$bad
-baddy
-write.csv(baddy,"~/Desktop/strict/bads",row.names=F)
+# scatter(pca)
+# pca
+# loadingplot(pca,thres=0.0001)
+# these <- loadingplot(pca, thres=0.0001)
+# bad <- these$var.idx
+# bad2 <- as.data.frame(bad)
+# baddy <- bad2$bad
+# baddy
+# write.csv(baddy,"~/Desktop/strict/bads",row.names=F)
 
 #gl@loc.names
 #gl@loc.names[10000]
