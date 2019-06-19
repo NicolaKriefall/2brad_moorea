@@ -1,5 +1,5 @@
 #2bRAD analysis 
-#following Mikhail Matz's script from https://github.com/z0on/2bRAD_denovo/blob/master/2bRAD_README.txt
+#following Mikhail Matz's script from https://github.com/z0on/2bRAD_denovo/
 
 # ==============================================
 #      Genome reference placement & indexing (if you have it)
@@ -9,7 +9,9 @@ module load picard
 module load bowtie2
 module load samtools
 
-# indexing genome for bowtie2 mapper
+#assuming we have a fasta file mygenome.fasta and it lives in the current directory
+export GENOME_FASTA=Amil.fasta 
+export GENOME_DICT=Amil.dict
 
 #made job 'build.sh'
 nano build.sh
@@ -21,10 +23,12 @@ nano build.sh
 #$ -l h_rt=24:00:00
 #$ -M thenicolakriefall@gmail.com
 #$ -m be
-GENOME_FASTA=Amil.fasta #assuming we have a fasta file mygenome.fasta and it lives in the current directory
-GENOME_DICT=Amil.dict
 bowtie2-build $GENOME_FASTA $GENOME_FASTA
-samtools faidx $GENOME_FASTA
-picard CreateSequenceDictionary R=$GENOME_FASTA  O=$GENOME_DICT
 
 qsub build.sh
+
+#quick one - didn't do a job
+samtools faidx $GENOME_FASTA
+
+#also a quick one
+picard CreateSequenceDictionary R=$GENOME_FASTA  O=$GENOME_DICT
