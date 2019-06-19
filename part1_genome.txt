@@ -1,0 +1,30 @@
+#2bRAD analysis 
+#following Mikhail Matz's script from https://github.com/z0on/2bRAD_denovo/blob/master/2bRAD_README.txt
+
+# ==============================================
+#      Genome reference placement & indexing (if you have it)
+
+# will need bowtie2, samtools, and picard. They are pre-installed as modules on TACC/SCC; you will have to install them if you don't have these modules on your cluster. 
+module load picard
+module load bowtie2
+module load samtools
+
+# indexing genome for bowtie2 mapper
+
+#made job 'build.sh'
+nano build.sh
+
+#!/bin/bash -l
+#$ -V # inherit the submission environment
+#$ -cwd #start job in submission directory
+#$ -N build.sh # job name, anything you want
+#$ -l h_rt=24:00:00
+#$ -M thenicolakriefall@gmail.com
+#$ -m be
+GENOME_FASTA=Amil.fasta #assuming we have a fasta file mygenome.fasta and it lives in the current directory
+GENOME_DICT=Amil.dict
+bowtie2-build $GENOME_FASTA $GENOME_FASTA
+samtools faidx $GENOME_FASTA
+picard CreateSequenceDictionary R=$GENOME_FASTA  O=$GENOME_DICT
+
+qsub build.sh
