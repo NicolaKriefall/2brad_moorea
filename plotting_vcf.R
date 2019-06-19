@@ -1,12 +1,12 @@
-setwd('~/Google Drive/Moorea/2brad_moorea/')
+setwd('~/Google Drive/Moorea/2brad_moorea/working/')
 library(vcfR)
 library(adegenet)
 library(vegan) 
 
-gl=vcfR2genlight(read.vcfR("run2.vcf"))
+gl=vcfR2genlight(read.vcfR("run4.vcf"))
 
 pops=read.table("bamscl_year.txt",sep="\t")
-#pops=read.table("~/Desktop/moorea/pops_allcl_site.txt",sep="\t")
+#pops=read.table("bamscl_site.txt",sep="\t")
 
 pop(gl)=pops$V2
 pca=glPca(gl,nf=3,parallel=F)
