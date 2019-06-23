@@ -31,4 +31,4 @@ qsub build.sh
 samtools faidx $GENOME_FASTA
 
 #also a quick one
-picard CreateSequenceDictionary R=$GENOME_FASTA  O=$GENOME_DICT
+picard CreateSequenceDictionary R=$GENOME_FASTA O=$GENOME_DICT
