@@ -1,0 +1,165 @@
+#2bRAD analysis 
+#following Mikhail Matz's script from https://github.com/z0on/2bRAD_denovo/blob/master/2bRAD_README.txt
+#edits by Nicola Kriefall [thenicolakriefall(at)gmail.com] for BU's SCC
+
+#beginning:
+#2. Always module load all of the things (these are already installed on BU's computer cluster):
+module load perl
+module load bowtie
+module load samtools
+module load java
+module load fastx-toolkit
+module load bowtie2
+module load java/1.8.0_151
+module load R
+module load gatk
+module load vcftools
+module load python2
+module load python3
+
+module load python/2.7.13
+module load vcftools
+module load angsd
+module load plink/1.90b4.4
+module load admixture
+module load ngsadmix
+module load ngsrelate
+module load ngsld
+module load ngspopgen
+module load 2brad_denovo/2019-01-22_eec5016
+module load 2brad_denovo
+
+#intro------------------------------------------------------------------------------------
+#cd to where your files are
+cd /projectdir/etc
+
+#1. Presumedly, you have your Illumina files in .fastq format
+#	a. Possibly compressed, so unzip them. Mine were gzipped:
+gunzip *.fastq
+
+#Pulled the following information from this website: http://support.illumina.com/content/dam/illumina-support/help/BaseSpaceHelp_v2/Content/Vault/Informatics/Sequencing_Analysis/BS/swSEQ_mBS_FASTQFiles.htm
+
+#Here's an example of what the file name looks like:
+#A_CCGCGT_L006_R1_001.fastq
+#	A = a sample name for all those with the barcode "CCGCGT"
+#	CCGCGT = unique 6-base barcode in the Illumina adaptors, used by the sequencer to pull out your samples
+#		adaptor: CAAGCAGAAGACGGCATACGAGAT [barcode] GTGACTGGAGTTCAGACGTGTGCTCTTCCGAT
+# 	L006 = lane number
+#	R1 = The read (direction of sequencing). This run didn't have R2, which would be the reverse direction
+#	001 = The last segment is always 001. 
+
+#Within the file:
+head -50 [FILENAME].fastq
+#output -->
+#	@HWI-D00289:176:C6G3TANXX:8:1101:5522:1992 1:N:0:GCCGCG
+#	NCGTCCCGTTAGTTTTCCCGAGAAAATTGCCGAGCGAAGGATACCAAGATC
+#	+
+#	#<<BBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+#	@HWI-D00289:176:C6G3TANXX:8:1101:9186:1998 1:N:0:GCCGCG
+#	NTATCCGCAATCCTCTAGCGAATAAGATGCGCTCCGATAGCTGTGTAGATC
+#	+
+#	#<<BBFFFFFFFFFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+#	@HWI-D00289:176:C6G3TANXX:8:1101:9219:2000 1:N:0:GCCGCG
+#	NTGTCCAGTGAATGTATAGCACGAAATTCGTCGGAGAGACTGGTGTAGATC
+#	+
+#	#<<BBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+#		LINE 1 = SEQUENCE IDENTIFIER
+#			@ = beginning of read, can be used with "grep" to do read counts!
+#			HWI-D00289 = instrument
+#			176 = run id
+#			C6G3TANXX = flow cell id
+#			8 = flow cell lane
+#			1101 = file number
+#			####:#### (last eight numbers) = x:y
+#			1:N:0:GCCGCG = 1 or 2 (pair):filtered? (yes/no):control spec (always 0):sample number
+#		LINE 2 = RAW SEQUENCE [~51 characters]
+#			Ends with universal adaptor (in this case, AGATC, which we call "AGAT?" in deduplicating step
+#			Second to last = One of 12 barcodes, such as "ACCA" or "GTGT"
+#			Also contains the recognition site for the BcgI enzyme: BcgI: '.{12}CGA.{6}TGC.{12}|.{12}GCA.{6}TCG.{12}'
+#		LINE 4 = QUALITY SCORES
+#			See https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm
+#			Scores go from 0-40, 40 being highest
+
+#I had to concatenate my 2015 data from multiple lanes - skip if you have unique samples in each lane:
+#I used 'cat lane1.fastq lane2.fastq lane3.fastq > fastq' instead of 'ngs_concat' perl script from Misha:
+#cat A_CCGCGT_L006_R1_001.fastq A_CCGCGT_L007_R1_001.fastq A_CCGCGT_L008_R1_001.fastq > A_2015.fastq
+#cat B_CGCCCT_L006_R1_001.fastq B_CGCCCT_L007_R1_001.fastq B_CGCCCT_L008_R1_001.fastq > B_2015.fastq
+#cat C_CTGCAG_L006_R1_001.fastq C_CTGCAG_L007_R1_001.fastq C_CTGCAG_L008_R1_001.fastq > C_2015.fastq
+#cat D_GAAGTT_L006_R1_001.fastq D_GAAGTT_L007_R1_001.fastq D_GAAGTT_L008_R1_001.fastq > D_2015.fastq
+#cat E_GCACCC_L006_R1_001.fastq E_GCACCC_L007_R1_001.fastq E_GCACCC_L008_R1_001.fastq > E_2015.fastq
+#cat F_GCAGGA_L006_R1_001.fastq F_GCAGGA_L007_R1_001.fastq F_GCAGGA_L008_R1_001.fastq > F_2015.fastq
+#cat G_GCCGCG_L006_R1_001.fastq G_GCCGCG_L007_R1_001.fastq G_GCCGCG_L008_R1_001.fastq > G_2015.fastq
+
+#Trimming & deduplicating fastq files
+2bRAD_trim_launch_dedup.pl fastq adaptor="AGAT?" sampleID=2 > trims
+#had to change the sampleID location for the concatenated ones:
+#2bRAD_trim_launch_dedup.pl fastq adaptor="AGAT?" sampleID=1 > trims
+
+nano trims
+#added this text to the top of 'trims' file:
+#!/bin/bash -l
+#$ -V # inherit the submission environment
+#$ -cwd # start job in submission directory
+#$ -N trims # job name, anything you want
+#$ -l h_rt=24:00:00
+#$ -M thenicolakriefall@gmail.com #your email notification
+#$ -m be
+
+#don't add to trims, instructions to leave nano:
+#exit = ctrl + c
+#save = y
+#enter
+
+#submit job
+qsub trims
+
+#had to do this other line to catch some samples processed an old way:
+#2bRAD_trim_launch.pl fastq barcode2=4 adaptor=“AGATCGGAA?” sampleID=2 > trims2
+#qsub trims
+
+#creates a list of the fastq files, launches trim2bRAD_2barcodes_dedup.pl for each file
+#trim2bRAD_2barcodes_dedup.pl does the following:
+#- Filters 2bRAD fastq reads to leave only those with a 100% matching restriction site,
+#degenerate 5'-leader, secondary 3'-barcode, and adaptor on the far 3'end, 
+#trims away everything except the IIb-fragment itself;
+#
+#- Deduplicates: removes all but one read sharing the same 64-fold degenerate
+#leader, the first 34 bases of the insert sequence, and secondary barcode
+#(this results in 128-fold dynamic range: 64-fold degeneracy x 2 strand orientations);
+#
+#- Splits reads into separate files according to secondary barcode.
+#
+#Writes trimmed fastq files named according to the secondary barcodes detected. 
+#creates .tr0 files
+#creates an output file that has de-duplication counts information (trims.o*)
+#to see counts info:
+nano trims.o*
+#counts for files processed the old way:
+#trim2.0 fastq=MO_75_S4_L002_R1_001.fastq adaptor="AGATCGGAA?"
+#trim2.0 = 2bRAD_trim_launch.pl with hashtags removed from last 2 parts
+
+#Quality filtering
+ls *.tr0 | perl -pe 's/^(\S+)\.tr0$/cat $1\.tr0 \| fastq_quality_filter -q 20 -p 100 >$1\.trim/' > filt0
+# NOTE: run the next line ONLY if your qualities are 33-based 
+# (if you don't know just try to see if it works eventually, if you get errors from fastx_toolkit, try the other one):
+cat filt0 | perl -pe 's/filter /filter -Q33 /' > filt
+#if you did NOT run the line above, run this one (after removing # symbol):
+# 	mv filt0 filt
+
+nano filt
+#added this text to the top of 'filt':
+#$ -V # inherit the submission environment
+#$ -cwd # start job in submission directory
+#$ -N filt # job name, anything you want
+#$ -l h_rt=24:00:00
+#$ -M thenicolakriefall@gmail.com
+#$ -m be
+
+#leave nano & save - see instructions above
+qsub filt
+
+#input = .tr0 files, output = .trim files
+#-q 20 = minimum quality score to keep is 20
+#-p minimum percent of bases that must have 20 quality
+#quality scores are in Sanger format (Phred+33) = what Misha means by 33-based quality scores
+#samples are ready for mapping to reference genome!
