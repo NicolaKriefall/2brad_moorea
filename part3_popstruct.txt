@@ -50,14 +50,14 @@ TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGe
 #!/bin/bash -l
 #$ -V # inherit the submission environment
 #$ -cwd #start job in submission directory
-#$ -N notah.sh # job name, anything you want
+#$ -N all.sh # job name, anything you want
 #$ -l h_rt=24:00:00
 #$ -M thenicolakriefall@gmail.com
 #$ -m be
-FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 57 -snp_pval 1e-5 -minMaf 0.1 -minIndDepth 13 -hwe_pval 1e-5"
-TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2"
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 99 -snp_pval 1e-5 -minMaf 0.1 -minIndDepth 10 -hwe_pval 1e-5"
+TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 32 -doVcf 1 -doPost 1 -doGlf 2 -dumpCounts2"
 
-angsd -b bamscl -GL 1 $FILTERS $TODO -P 1 -out notah
+angsd -b bamscl -GL 1 $FILTERS $TODO -P 1 -out allresult
 
 # how many SNPs?
 NSITES=`zcat run3.mafs.gz | wc -l`
