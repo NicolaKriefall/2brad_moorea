@@ -50,41 +50,64 @@ TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGe
 #!/bin/bash -l
 #$ -V # inherit the submission environment
 #$ -cwd #start job in submission directory
-#$ -N all.sh # job name, anything you want
+#$ -N some.sh # job name, anything you want
 #$ -l h_rt=24:00:00
 #$ -M thenicolakriefall@gmail.com
 #$ -m be
-FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 99 -snp_pval 1e-5 -minMaf 0.1 -minIndDepth 10 -hwe_pval 1e-5"
-TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 32 -doVcf 1 -doPost 1 -doGlf 2 -dumpCounts2"
-
-angsd -b bamscl -GL 1 $FILTERS $TODO -P 1 -out allresult
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 91 -snp_pval 1e-5 -minMaf 0.05 -minIndDepth 10 -hwe_pval 1e-5"
+TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 32 -doVcf 1 -doPost 1 -doGlf 2 -dumpCounts 2"
+angsd -b bams_no8 -GL 1 $FILTERS $TODO -P 1 -out someresult
 
 # how many SNPs?
-NSITES=`zcat run3.mafs.gz | wc -l`
+NSITES=`zcat someresult.mafs.gz | wc -l`
 echo $NSITES
 
 # LD: (use rEM for WGCNA, to look for signatures of polygenic selection):
 module load gsl
+NS=`zcat someresult.geno.gz | wc -l`
+NB=`cat bams_no8 | wc -l`
+zcat someresult.mafs.gz | tail -n +2 | cut -f 1,2 > some.sites
+ngsLD --geno someresult.geno.gz --probs 1 --n_ind $NB --n_sites $NS --max_kb_dist 0 --pos some.sites --out some.LD --n_threads 12 --extend_out 1
+#max_kb_dist set to 0 means it will do all pairwise comparisons
 
-NS=`zcat run1.geno.gz | wc -l`
-NB=`cat bamscl | wc -l`
-zcat run1.mafs.gz | tail -n +2 | cut -f 1,2 > r1.sites
-ngsLD --geno run1.geno.gz --probs 1 --n_ind $NB --n_sites $NS --max_kb_dist 0 --pos r1.sites --out run1.LD --n_threads 12 --extend_out 1
+#to remove linked sites:
+module load ngsld
+module load perl
+
+nano prune.sh
+#!/bin/bash -l
+#$ -V # inherit the submission environment
+#$ -cwd #start job in submission directory
+#$ -N prune.sh # job name, anything you want
+#$ -l h_rt=24:00:00
+#$ -M thenicolakriefall@gmail.com
+#$ -m be
+prune_graph.pl --in_file some.ld --max_kb_dist 5 --min_weight 0.5 --out some_unlinked.id
+
+#exit nano
+qsub prune.sh
+
+angsd sites indexing not working
+#generated unlinked file - not sure how to get it out of my data yet
 
 # NgsAdmix for K from 2 to 5 : do not run if the dataset contains clones or genotyping replicates!
 for K in `seq 2 5` ; 
 do 
-NGSadmix -likes myresult.beagle.gz -K $K -P 10 -o mydata_k${K};
+NGSadmix -likes someresult.beagle.gz -K $K -P 10 -o some_k${K};
 done
 
 # alternatively, to use real ADMIXTURE on called SNPs (requires plink and ADMIXTURE):
-gunzip myresult.vcf.gz
-plink --vcf myresult.vcf --make-bed --allow-extra-chr --out myresult
+gunzip someresult.vcf.gz
+
+module load plink/1.90b6.4
+module load admixture
+
+plink --vcf someresult.vcf --make-bed --allow-extra-chr 0 --out some
 for K in `seq 1 5`; \
-do admixture --cv myresult.bed $K | tee myresult_${K}.out; done
+do admixture --cv some.bed $K | tee some_${K}.out; done
 
 # which K is least CV error?
-grep -h CV myresult_*.out
+grep -h CV some_*.out
 
 # scp the *.Q and inds2pops files to laptop, plot it in R:
 # use admixturePlotting2a.R to plot (will require minor editing - population names)
