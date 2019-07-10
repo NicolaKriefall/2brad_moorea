@@ -1,0 +1,74 @@
+----- Install Bayescan :
+
+cd ~/bin
+wget http://cmpg.unibe.ch/software/BayeScan/files/BayeScan2.1.zip
+unzip BayeScan2.1.zip
+cp BayeScan2.1/binaries/BayeScan2.1_linux64bits bayescan
+chmod +x bayescan
+rm -r BayeScan*
+
+#============= Bayescan: looking for Fst outliers
+
+# Converting vcf (using PGDspider) to Bayescan format: 
+
+# make tab-delimited file called bspops LISTING assignments of individuals (as they are named in the vcf file) to populations, for example:
+ind1	pop0
+ind2	pop0
+ind3	pop1
+ind4	pop1
+
+# create a file called vcf2bayescan.spid containing this text:
+echo "############
+# VCF Parser questions
+PARSER_FORMAT=VCF
+# Do you want to include a file with population definitions?
+VCF_PARSER_POP_QUESTION=true
+# Only input following regions (refSeqName:start:end, multiple regions: whitespace separated):
+VCF_PARSER_REGION_QUESTION=
+# What is the ploidy of the data?
+VCF_PARSER_PLOIDY_QUESTION=DIPLOID
+# Only output following individuals (ind1, ind2, ind4, ...):
+VCF_PARSER_IND_QUESTION=
+# Output genotypes as missing if the read depth of a position for the sample is below:
+VCF_PARSER_READ_QUESTION=
+# Take most likely genotype if "PL" or "GL" is given in the genotype field?
+VCF_PARSER_PL_QUESTION=true
+# Do you want to exclude loci with only missing data?
+VCF_PARSER_EXC_MISSING_LOCI_QUESTION=false
+# Select population definition file:
+VCF_PARSER_POP_FILE_QUESTION=./pops_mse
+# Only output SNPs with a phred-scaled quality of at least:
+VCF_PARSER_QUAL_QUESTION=
+# Do you want to include non-polymorphic SNPs?
+VCF_PARSER_MONOMORPHIC_QUESTION=false
+# Output genotypes as missing if the phred-scale genotype quality is below:
+VCF_PARSER_GTQUAL_QUESTION=
+# GESTE / BayeScan Writer questions
+WRITER_FORMAT=GESTE_BAYE_SCAN
+# Specify which data type should be included in the GESTE / BayeScan file  (GESTE / BayeScan can only analyze one data type per file):
+GESTE_BAYE_SCAN_WRITER_DATA_TYPE_QUESTION=SNP
+############" >mse.spid
+
+# converting vcf (either myresult.vcf from ANGSD or the one from GATK) to bayescan format
+module load pgdspider
+PGDSpider2-cli -inputfile someresult.vcf -outputfile mse.best.bayescan -spid mse.spid 
+
+# launching bayescan (this might take 12-24 hours)
+nano bae_mse.sh
+
+#!/bin/bash -l
+#$ -V # inherit the submission environment
+#$ -cwd #start job in submission directory
+#$ -N bae_mse.sh # job name, anything you want
+#$ -l h_rt=36:00:00
+#$ -M thenicolakriefall@gmail.com
+#$ -m be
+bayescan mse.best.bayescan -threads=16
+#exit bae_mse.sh [ctrl + x]
+qsub -pe omp 16 bae_mse.sh 
+#uses 16 threads
+
+# use bayescan_plots.R to examine results
+
+# removing outliers from VCF file
+removeBayescanOutliers.pl bayescan=snp.baye_fst.txt vcf=myresult.vcf FDR=0.5 >myresult_nobs.vcf

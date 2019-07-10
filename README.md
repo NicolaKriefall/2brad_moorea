@@ -11,3 +11,6 @@ Mapping reads to reference genome to create .bam files
 
 Part 3: Population structure</br>
 Using .bam files to explore population structure in PCA & K plot
+
+Part 4: FST outliers</br>
+Using .vcf file to find FST outliers using Bayescan
