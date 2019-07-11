@@ -1,19 +1,19 @@
 setwd("~/Google Drive/Moorea/working/")
-source('plot_R.r')
+source('part4_plot_R_function copy.r')
 
 #install.packages("boa")
 library(boa)
 
-dat=read.table("best.baye_fst.txt",header=T)
+dat=read.table("mnw.baye_fst.txt",header=T)
 head(dat)
 table(dat[,"qval"]<0.1)
 # FALSE  TRUE 
 # 24736   119 
 # map-anchored: 9244    32 
 outs=which(dat[,"qval"]<0.1)
-plot_bayescan("best.baye_fst.txt",FDR=0.1,add_text=F,size=0.5,highlight=outs)
-plot_bayescan("best.baye_fst.txt",FDR=0.1,add_text=T)
-plot_bayescan("best.baye_fst.txt",FDR=0.05)
+plot_bayescan("mnw.baye_fst.txt",FDR=0.1,add_text=F,size=0.5,highlight=outs)
+#plot_bayescan("best.baye_fst.txt",FDR=0.1,add_text=T)
+#plot_bayescan("best.baye_fst.txt",FDR=0.05)
 
 toRemove=which(dat$qval<0.1)
 toRemove
@@ -37,7 +37,7 @@ system("tail -n +2 body1.vhap >nohead.vhap")
 system("cat header.vhap nohead.vhap >noOuts.hap.vcf")
 
 #----------------
-mydata=read.table("best.baye.sel",colClasses="numeric")
+mydata=read.table("mnw.baye.sel",colClasses="numeric")
 head(mydata)
 parameter="Fst1"
 quartz()

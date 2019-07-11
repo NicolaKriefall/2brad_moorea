@@ -59,7 +59,7 @@ TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGe
 angsd -b bams_no8 -GL 1 $FILTERS $TODO -P 1 -out someresult
 
 # how many SNPs?
-NSITES=`zcat someresult.mafs.gz | wc -l`
+NSITES=`zcat mnw_result.mafs.gz | wc -l`
 echo $NSITES
 
 # LD: (use rEM for WGCNA, to look for signatures of polygenic selection):

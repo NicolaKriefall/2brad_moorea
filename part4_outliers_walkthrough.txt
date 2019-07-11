@@ -36,7 +36,7 @@ VCF_PARSER_PL_QUESTION=true
 # Do you want to exclude loci with only missing data?
 VCF_PARSER_EXC_MISSING_LOCI_QUESTION=false
 # Select population definition file:
-VCF_PARSER_POP_FILE_QUESTION=./pops_mse
+VCF_PARSER_POP_FILE_QUESTION=./pops_tah
 # Only output SNPs with a phred-scaled quality of at least:
 VCF_PARSER_QUAL_QUESTION=
 # Do you want to include non-polymorphic SNPs?
@@ -47,25 +47,26 @@ VCF_PARSER_GTQUAL_QUESTION=
 WRITER_FORMAT=GESTE_BAYE_SCAN
 # Specify which data type should be included in the GESTE / BayeScan file  (GESTE / BayeScan can only analyze one data type per file):
 GESTE_BAYE_SCAN_WRITER_DATA_TYPE_QUESTION=SNP
-############" >mse.spid
+############" >tah.spid
 
 # converting vcf (either myresult.vcf from ANGSD or the one from GATK) to bayescan format
 module load pgdspider
-PGDSpider2-cli -inputfile someresult.vcf -outputfile mse.best.bayescan -spid mse.spid 
+PGDSpider2-cli -inputfile mnw_result.vcf -outputfile mnw.bayescan -spid mnw.spid 
 
 # launching bayescan (this might take 12-24 hours)
-nano bae_mse.sh
+nano bae_mnw.sh
 
 #!/bin/bash -l
 #$ -V # inherit the submission environment
 #$ -cwd #start job in submission directory
-#$ -N bae_mse.sh # job name, anything you want
+#$ -N bae_mnw.sh # job name, anything you want
 #$ -l h_rt=36:00:00
 #$ -M thenicolakriefall@gmail.com
 #$ -m be
-bayescan mse.best.bayescan -threads=16
+bayescan mnw.bayescan -threads=16
+
 #exit bae_mse.sh [ctrl + x]
-qsub -pe omp 16 bae_mse.sh 
+qsub -pe omp 16 bae_mnw.sh 
 #uses 16 threads
 
 # use bayescan_plots.R to examine results
