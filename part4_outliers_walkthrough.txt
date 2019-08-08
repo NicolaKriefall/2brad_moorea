@@ -51,22 +51,22 @@ GESTE_BAYE_SCAN_WRITER_DATA_TYPE_QUESTION=SNP
 
 # converting vcf (either myresult.vcf from ANGSD or the one from GATK) to bayescan format
 module load pgdspider
-PGDSpider2-cli -inputfile mnw_result.vcf -outputfile mnw.bayescan -spid mnw.spid 
+PGDSpider2-cli -inputfile tah_hwe.vcf -outputfile tah.hwe.baye -spid tah.spid 
 
 # launching bayescan (this might take 12-24 hours)
-nano bae_mnw.sh
+nano bae_tah_hwe.sh
 
 #!/bin/bash -l
 #$ -V # inherit the submission environment
 #$ -cwd #start job in submission directory
-#$ -N bae_mnw.sh # job name, anything you want
+#$ -N bae_tah_hwe.sh # job name, anything you want
 #$ -l h_rt=36:00:00
 #$ -M thenicolakriefall@gmail.com
 #$ -m be
-bayescan mnw.bayescan -threads=16
+bayescan tah.hwe.baye -threads=16
 
 #exit bae_mse.sh [ctrl + x]
-qsub -pe omp 16 bae_mnw.sh 
+qsub -pe omp 16 bae_mse.sh 
 #uses 16 threads
 
 # use bayescan_plots.R to examine results

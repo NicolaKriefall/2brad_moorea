@@ -4,7 +4,7 @@ source('part4_plot_R_function copy.r')
 #install.packages("boa")
 library(boa)
 
-dat=read.table("mnw.baye_fst.txt",header=T)
+dat=read.table("tah.hwe._fst.txt",header=T)
 head(dat)
 table(dat[,"qval"]<0.1)
 # FALSE  TRUE 
