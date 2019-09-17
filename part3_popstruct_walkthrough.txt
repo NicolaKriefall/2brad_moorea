@@ -14,7 +14,7 @@ ls *bam > bams
 # Note: PCA and Admixture are not supposed to be run on data that contain clones or genotyping replicates. For PCA, these can be removed without rerunning ANGSD from the IBS distance matrix; but for ngsAdmix ANGSD must be rerun.
 
 # Generating genotype likelihoods from highly confident (non-sequencing-error) SNPs
-# set minInd to 75-80% of your total number of bams [I did 80%]
+# set minInd to 75-80% of your total number of bams [I did ~80%, 109 samples out of 136 total]
 # if you expect very highly differentiated populations with nearly fixed alternative alleles, remove '-hwe_pval 1e-5' from FILTERS
 # -doGeno 8 : genotype likelihood format setting for ngsLD; if you want to run PCA, use -doGeno 32 (but I recommend using ibsMat for all ordination work)
 
@@ -28,8 +28,8 @@ nano angsd.sh
 #$ -l h_rt=24:00:00
 #$ -M thenicolakriefall@gmail.com
 #$ -m be
-FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 91 -snp_pval 1e-5 -minMaf 0.1 -minIndDepth 5 -hwe_pval 1e-5"
-TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 32 -doVcf 1 -doPost 1 -doGlf 2 -dumpCounts 2"
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 109 -snp_pval 1e-5 -minMaf 0.1 -minIndDepth 5 -hwe_pval 1e-5"
+TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2 -dumpCounts 2"
 angsd -b bams -GL 1 $FILTERS $TODO -P 1 -out myresult
 #exit & save
 
@@ -39,7 +39,7 @@ qsub angsd.sh
 # sftp (or some other transfer method) to file transfer 'myresult.ibsMat' & 'bams' to your local computer
 # use part3_ibs_findclones.R to see results
 
-# Assessing average site depth coverage using vcftools:
+# Assessing average site depth coverage per sample using vcftools:
 gunzip myresult.vcf.gz
 # You have to do this strange thing where you remove "(angsd version)" from the header of your vcf file, or else vcftools won't work
 nano myresult.vcf
@@ -52,13 +52,34 @@ module load vcftools
 vcftools --vcf myresult.vcf.gz --depth
 #results (mean depth of sites per individual) are in a file ending in '.idepth'
 
-# how many SNPs?
-NSITES=`zcat allall.mafs.gz | wc -l`
+#after looking at my sample's depths, I decided to get rid of samples with less than an average of 8 reads for my final analysis, increases the number of reliable SNPs you get from the total dataset
+#also removed technical replicates/clones from 'bams' file & saved it as 'bams_no8'
+
+#re-running ANGSD without clones & without poorly covered samples:
+nano angsd_donish.sh
+# added the following text to .sh:
+#!/bin/bash -l
+#$ -V # inherit the submission environment
+#$ -cwd #start job in submission directory
+#$ -N angsd_donish.sh # job name, anything you want
+#$ -l h_rt=24:00:00
+#$ -M thenicolakriefall@gmail.com
+#$ -m be
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 20 -minQ 25 -dosnpstat 1 -doHWE 1 -sb_pval 1e-5 -hetbias_pval 1e-5 -skipTriallelic 1 -minInd 91 -snp_pval 1e-5 -minMaf 0.05 -minIndDepth 5 -hwe_pval 1e-5"
+TODO="-doMajorMinor 1 -doMaf 1 -doCounts 1 -makeMatrix 1 -doIBS 1 -doCov 1 -doGeno 8 -doVcf 1 -doPost 1 -doGlf 2 -dumpCounts 2"
+angsd -b bams_no8 -GL 1 $FILTERS $TODO -P 1 -out donresult
+#exit & save
+
+qsub angsd_donish.sh
+
+how many SNPs?
+NSITES=`zcat donresult.mafs.gz | wc -l`
 echo $NSITES
+#I had 5350 sites
 
 # LD: (use rEM for WGCNA, to look for signatures of polygenic selection):
 module load gsl
-NS=`zcat someresult.geno.gz | wc -l`
+NS=`zcat myresult.geno.gz | wc -l`
 NB=`cat bams_no8 | wc -l`
 zcat someresult.mafs.gz | tail -n +2 | cut -f 1,2 > some.sites
 ngsLD --geno someresult.geno.gz --probs 1 --n_ind $NB --n_sites $NS --max_kb_dist 0 --pos some.sites --out some.LD --n_threads 12 --extend_out 1
