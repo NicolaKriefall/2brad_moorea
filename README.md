@@ -4,7 +4,7 @@ Scripts for analyzing my 2bRAD data from corals in French Polynesia (modified fr
 Head straight to the 'walkthrough' files for each part for instructions.
 
 Part 1: Genome</br>
-Placing & indexing reference genome - if you don't have a reference genome you'll have to see Misha's instructions at https://github.com/z0on/2bRAD_denovo
+Placing & indexing reference genome - if you don't have a reference genome you'll have to follow Misha's instructions at https://github.com/z0on/2bRAD_denovo, the rest of my instructions will also be missing any 'de novo' specific commands
 
 Part 2: Reads</br>
 Filtering & trimming raw reads</br>
