@@ -1,12 +1,11 @@
-setwd('~/Google Drive/Moorea/2brad_moorea/working/')
+setwd('~/Google Drive/Moorea/2brad_moorea/Host/')
 library(vcfR)
 library(adegenet)
 library(vegan) 
 
-gl=vcfR2genlight(read.vcfR("run4.vcf"))
+gl=vcfR2genlight(read.vcfR("donresult.vcf.gz")) #output from angsd
 
-pops=read.table("bamscl_year.txt",sep="\t")
-#pops=read.table("bamscl_site.txt",sep="\t")
+pops=read.table("bamscl_site.txt",sep="\t") #bams file with a 2nd column describing variable of interest
 
 pop(gl)=pops$V2
 pca=glPca(gl,nf=3,parallel=F)
@@ -56,12 +55,3 @@ plot(pca$scores[,1:2],col=transp(as.numeric(as.factor(pop(gl))),0.3),pch=19)
 ordispider(pca$scores[,1:2],pop(gl),col=as.numeric(as.factor(pop(gl))),label=T)
 ordiellipse(pca$scores[,1:2],pops$V2,label=T,draw="polygon",col="grey90")
 
-#comparing the good & bad snps:
-goods <- read.table("good.idepth",header=TRUE)
-bads <- read.table("bad.idepth",header=TRUE)
-goods$good_depth <- goods$MEAN_DEPTH
-bads$bad_depth <- bads$MEAN_DEPTH
-new <- merge(goods,bads,by.x="INDV",by.y="INDV")
-str(new)
-plot(good_depth~INDV,data=new)
-summarySE()
