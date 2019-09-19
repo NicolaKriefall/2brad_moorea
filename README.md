@@ -11,10 +11,7 @@ Filtering & trimming raw reads</br>
 Mapping reads to reference genome to create .bam files
 
 Part 3: Population structure</br>
-First, use angsd + ibs results to identify technical replicates & clones
-Then use vcftools to find average site depth per sample
-Then re-run angsd without worst samples & without technical replicates/clones
-Explore population structure in PCA & K plot
+First, use angsd + ibs results to identify technical replicates & clones. Then use vcftools to find average site depth per sample. Then re-run angsd without worst samples & without technical replicates/clones. Explore population structure in PCA & K plot. 
 
 Part 4: FST outliers</br>
 Using .vcf file to find FST outliers using Bayescan
