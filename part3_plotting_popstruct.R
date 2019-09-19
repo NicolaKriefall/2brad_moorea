@@ -1,6 +1,5 @@
 ####PCA from .vcf file####
 
-setwd('~/Google Drive/Moorea/2brad_moorea/Host/')
 library(vcfR)
 library(adegenet)
 library(vegan) 
@@ -18,7 +17,7 @@ gl=vcfR2genlight(read.vcfR("~/Google Drive/Moorea/Host/donresult.vcf.gz")) #outp
 # temp <- density(myFreq)
 # lines(temp$x, temp$y*1.8,lwd=3)
 
-pops=read.table("part3input_inds2pops_no8.txt",sep="\t") #bams file with a 2nd column describing variable of interest
+pops=read.table("~/Google Drive/Moorea/Host/part3input_inds2pops_no8.txt",sep="\t") #bams file with a 2nd column describing variable of interest
 #pops=read.table("bamscl_year_no8.txt",sep="\t") #another variable I looked at
 
 pop(gl)=pops$V2 #you can have other columns with other variables in other columns, select which one for analysis here
@@ -62,13 +61,15 @@ adonis(scores ~ site,method='manhattan')
 
 #ggplot pca
 library(ggplot2)
+#install.packages("ggrepel")
+library(ggrepel)
 
 #adding zone variable in addition to site
-zones <- read.table("part3input_inds2pops_zone.txt") #2nd column is my reef zones instead of sites
+zones <- read.table("~/Google Drive/Moorea/Host/part3input_inds2pops_zone.txt") #2nd column is my reef zones instead of sites
 zone <- zones$V2 #just selecting second column
 
 #adding more reef info
-reefs <- read.table("part3input_inds2pops_reef.txt")
+reefs <- read.table("~/Google Drive/Moorea/Host/part3input_inds2pops_reef.txt")
 reef <- reefs$V2
 
 p1 <- ggordiplots::gg_ordiplot(ord=scores,groups=site,scaling=0.8,choices=c(1,2),conf=0.7,spiders=FALSE,pt.size=2)
@@ -79,22 +80,42 @@ gg <- p1$df_ord
 gg$zone <- zone
 gg$reef <- reef
 quartz()
-ggplot(gg,aes(x=x,y=y,group=Group,color=zone,shape=reef))+
+ggplot(gg,aes(x=x,y=y,color=zone,shape=reef,fill=zone))+
   geom_point(size=2)+
-  geom_segment(data=p1$df_spiders, aes(x=x, y=y, xend=cntr.x, yend=cntr.y))+
-  stat_ellipse(level=0.8,linetype=reef)+
+ # geom_segment(data=p1$df_spiders, aes(x=x, y=y, xend=cntr.x, yend=cntr.y))+
+  stat_ellipse(level=0.8,aes(lty=zone),geom="polygon",alpha=0.1)+
   xlab('PC1 (4.11%)')+
   ylab('PC2 (4.06%)')+
   theme_classic()+
   scale_color_manual(values=c("#ED7953FF","#8405A7FF"),labels=c("Backreef","Forereef"))+
-  scale_shape_manual(values=c(21,24,25),labels=c("MNW","MSE","TNW"))
-  
+  scale_shape_manual(values=c(15,16,17),labels=c("MNW","MSE","TNW"))+
+  scale_fill_manual(values=c("#ED7953FF","#8405A7FF"),labels=c("Backreef","Forereef"))+
+  scale_linetype_manual(values=c("solid","twodash"),labels=c("Backreef","Forereef"))+
+  labs(shape="Site",color="Reef zone",linetype="Reef zone",fill="Reef zone")
+  # geom_label(x=-0.2618,y=-0.1116,label="MNW-B",color="black",fill="white")+
+  # geom_label(x=-0.3347,y=-0.1352,label="MNW-F",color="black",fill="white")+
+  # geom_label(x=-0.1423,y=-0.9173,label="MSE-B",color="black",fill="white")+
+  # geom_label(x=0.6595,y=0.8860,label="MSE-F",color="black",fill="white")+
+  # geom_label(x=-0.0550,y=-0.1702,label="TNW-B",color="black",fill="white")+
+  # geom_label(x=-0.0671,y=0.4204,label="TNW-F",color="black",fill="white")
 
-#  theme(text=element_text(family="Gill Sans MT"))+ #to change font
-#  scale_fill_manual(values=c("coral1","cyan3"),labels=c("Inshore","Offshore"))+
-#  labs(shape="Reef zone",color="Reef zone",fill="Reef zone")
+adonis(scores ~ reef*zone,method='manhattan')
 
-#####MDS plot/CCA from IBS matrix:#####
+#now for sequencing year
+years <- read.table("~/Google Drive/Moorea/Host/bamscl_year_no8.txt")
+year <- years[,2]
+
+quartz()
+ggplot(gg,aes(x=x,y=y,color=year,shape=year,fill=year))+
+  geom_point(size=2)+
+  # geom_segment(data=p1$df_spiders, aes(x=x, y=y, xend=cntr.x, yend=cntr.y))+
+  stat_ellipse(level=0.8,aes(lty=year),geom="polygon",alpha=0.1)+
+  xlab('PC1 (4.11%)')+
+  ylab('PC2 (4.06%)')+
+  theme_classic()+
+  labs(shape="Sequencer",color="Sequencer",linetype="Sequencer",fill="Sequencer")
+
+#####MDS plot/CCA from IBS matrix#####
 #[from Misha's angsd_ibs_pca.R script]
 setwd("~/Google Drive/Moorea/Host")
 bams=read.table("bams_no8")[,1] # list of bam files
@@ -107,7 +128,7 @@ goods=c(1:length(bams))
 ## removing "b" replicates
 #goods=which(!(bams %in% repsb))
 
-#--------------------
+#--
 # loading individual to population correspondences
 i2p=read.table("part3input_inds2pops_no8.txt",sep="\t") # 2-column tab-delimited table of individual assignments to populations; must be in the same order as samples in the bam list or vcf file.
 row.names(i2p)=i2p[,1]
@@ -119,7 +140,7 @@ palette(rainbow(length(unique(site))))
 colors=as.numeric(as.factor(site))
 colpops=as.numeric(as.factor(sort(unique(site))))
 
-#-------------
+#---
 # clustering / PCoA based on identity by state (IBS) based on single read resampling
 # (for low and/or uneven coverage)
 
@@ -172,3 +193,31 @@ ordiellipse(cmd,choices= axes2plot,groups= conds$site,draw="polygon",col=colpops
 #ordiellipse(cmd$CA$u[,axes2plot],groups= conds$site,draw="polygon",col=colpops,label=T)
 #identify(cmd$CA$u[,axes2plot],labels=colnames(ma),n=3,cex=0.7)
 
+####K plot from .vcf####
+# primitive look at admixture data:
+tbl=read.table("~/Google Drive/Moorea/Host/done.2.Q")
+barplot(t(as.matrix(tbl)), col=rainbow(5),xlab="Individual #", ylab="Ancestry", border=NA)
+
+#---
+# prettier:
+
+# assembling the input table
+dir="~/Google Drive/Moorea/Host/" # path to input files
+inName="done.2.Q" # name of the input file to plot, output of ngsAdmix or ADMIXTURE run
+npops=2
+pops="part3input_inds2pops_done.txt" # 2-column tab-delimited table of individual assignments to populations; must be in the same order as samples in the bam list or vcf file.
+tbl=read.table(paste(dir,inName,sep=""),header=F)
+i2p=read.table(paste(dir,pops,sep=""),header=F)
+names(i2p)=c("ind","pop")
+tbl=cbind(tbl,i2p)
+row.names(tbl)=tbl$ind
+
+head(tbl,20) # this is how the resulting dataset must look
+
+source("~/Google Drive/Moorea/Host/plot_admixture_v4_function.R")
+
+# putting populaitons in desired order (edit pop names as needed or skip to plot them alphabetically)
+#tbl$pop=factor(tbl$pop,levels=c("O","K"))
+
+quartz()
+ords=plotAdmixture(data=tbl,npops=npops,angle=0,vshift=0,hshift=0)

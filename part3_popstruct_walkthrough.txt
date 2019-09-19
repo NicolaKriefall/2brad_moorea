@@ -119,15 +119,21 @@ gunzip someresult.vcf.gz
 module load plink/1.90b6.4
 module load admixture
 
-plink --vcf someresult.vcf --make-bed --allow-extra-chr 0 --out some
+plink --vcf donresult.vcf.gz --make-bed --allow-extra-chr 0 --out done
 for K in `seq 1 5`; \
-do admixture --cv some.bed $K | tee some_${K}.out; done
+do admixture --cv done.bed $K | tee done_${K}.out; done
 
 # which K is least CV error?
-grep -h CV some_*.out
+grep -h CV done_*.out
+
+#CV error (K=1): 0.60678
+#CV error (K=2): 0.62188
+#CV error (K=3): 0.64356
+#CV error (K=4): 0.66027
+#CV error (K=5): 0.67737
 
 # scp the *.Q and inds2pops files to laptop, plot it in R:
-# use admixturePlotting2a.R to plot (will require minor editing - population names)
+# use part3_plotting_popstruct.R to plot (will require minor editing - population names)
 
 # scp *Mat, *qopt and bams files to laptop, use 
 
