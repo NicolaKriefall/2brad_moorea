@@ -72,7 +72,7 @@ angsd -b bams_no8 -GL 1 $FILTERS $TODO -P 1 -out donresult
 
 qsub angsd_donish.sh
 
-#transferred .vcf and new bams_no8 file to local working directory to use in 'part3_plotting_vcf.R'
+#transferred .vcf and new bams_no8 file to local working directory to use in 'part3_plotting_popstruct.R'
 
 how many SNPs?
 NSITES=`zcat donresult.mafs.gz | wc -l`
