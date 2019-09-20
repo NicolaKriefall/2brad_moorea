@@ -1,0 +1,279 @@
+MNWI_51.out.saf.idx.ml                  1231700.318346  3625.681654
+MNWI_51.trim.bt2.bam.out.saf.idx.ml     1487146.253305  4174.746695
+MNWI_53.trim.bt2.bam.out.saf.idx.ml     1551814.575780  4337.424220
+MNWI_55.trim.bt2.bam.out.saf.idx.ml     1272323.016323  3547.983677
+MNWI_56.trim.bt2.bam.out.saf.idx.ml     1042373.961558  2662.038442
+MNWI_57.trim.bt2.bam.out.saf.idx.ml     1071920.676650  3177.323350
+MNWI_58.trim.bt2.bam.out.saf.idx.ml     1173432.288575  3305.711425
+MNWI_59.trim.bt2.bam.out.saf.idx.ml     1230085.857651  3367.142349
+MNWI_62.trim.bt2.bam.out.saf.idx.ml     1165670.895914  3095.104086
+MNWI_63.trim.bt2.bam.out.saf.idx.ml     1346177.746010  3851.253990
+MNWI_65.trim.bt2.bam.out.saf.idx.ml     377789.389195   491.610805
+MNWI_69.trim.bt2.bam.out.saf.idx.ml     1316728.788424  3306.211576
+MNWI_70.trim.bt2.bam.out.saf.idx.ml     1284834.099194  3368.900806
+MNWI_71.trim.bt2.bam.out.saf.idx.ml     902987.788071   2658.211929
+MNWI_72.trim.bt2.bam.out.saf.idx.ml     1064624.767258  2566.232742
+MNWI_76.trim.bt2.bam.out.saf.idx.ml     706523.039365   1248.960635
+MNWI_87.trim.bt2.bam.out.saf.idx.ml     1578822.627342  4317.372658
+MNWI_89.trim.bt2.bam.out.saf.idx.ml     1060957.344107  2939.655893
+MNWI_98.trim.bt2.bam.out.saf.idx.ml     1502045.295081  4112.704919
+MNWO_104.trim.bt2.bam.out.saf.idx.ml    1201650.554320  3176.445680
+MNWO_111.trim.bt2.bam.out.saf.idx.ml    833810.427602   2206.572398
+MNWO_113.trim.bt2.bam.out.saf.idx.ml    1528873.389372  4238.610628
+MNWO_115.trim.bt2.bam.out.saf.idx.ml    1048400.691107  2705.308893
+MNWO_115d.trim.bt2.bam.out.saf.idx.ml   1232954.672414  3303.327586
+MNWO_115dd.trim.bt2.bam.out.saf.idx.ml  1075582.117840  2848.882160
+MNWO_117.trim.bt2.bam.out.saf.idx.ml    1307940.435128  3617.564872
+MNWO_119.trim.bt2.bam.out.saf.idx.ml    1325670.582928  3812.417072
+MNWO_125.trim.bt2.bam.out.saf.idx.ml    1348212.776069  3676.223931
+MNWO_130.trim.bt2.bam.out.saf.idx.ml    1359785.167047  3829.832953
+MNWO_156.trim.bt2.bam.out.saf.idx.ml    1187881.887324  3212.112676
+MNWO_157.trim.bt2.bam.out.saf.idx.ml    1480942.507675  4271.492325
+MNWO_157d.trim.bt2.bam.out.saf.idx.ml   1434539.328075  4088.671925
+MNWO_158.trim.bt2.bam.out.saf.idx.ml    1484482.061221  4141.938779
+MNWO_159.trim.bt2.bam.out.saf.idx.ml    1197589.942113  3035.057887
+MNWO_172.trim.bt2.bam.out.saf.idx.ml    1346782.603603  3584.396397
+MNWO_173.trim.bt2.bam.out.saf.idx.ml    1424506.470976  3794.529024
+MNWO_174.trim.bt2.bam.out.saf.idx.ml    1453289.642053  3891.357947
+MNWO_174d.trim.bt2.bam.out.saf.idx.ml   1449073.069707  3867.930293
+MNWO_175.trim.bt2.bam.out.saf.idx.ml    1563808.325024  4290.674976
+MNWO_177.trim.bt2.bam.out.saf.idx.ml    796297.675211   2070.324789
+MNWO_178.trim.bt2.bam.out.saf.idx.ml    1362576.900919  3747.099081
+MSEI_276.trim.bt2.bam.out.saf.idx.ml    1108875.623882  3166.376118
+MSEI_277.trim.bt2.bam.out.saf.idx.ml    827576.795451   2245.204549
+MSEI_297.trim.bt2.bam.out.saf.idx.ml    1536949.860360  4398.139640
+MSEI_298.trim.bt2.bam.out.saf.idx.ml    1363511.339312  3835.660688
+MSEI_300.trim.bt2.bam.out.saf.idx.ml    1499675.042121  4126.957879
+MSEI_301.trim.bt2.bam.out.saf.idx.ml    1508813.711819  4324.288181
+MSEI_303.trim.bt2.bam.out.saf.idx.ml    1436828.499567  4102.500433
+MSEI_304.trim.bt2.bam.out.saf.idx.ml    1445904.340017  4215.659983
+MSEI_305.trim.bt2.bam.out.saf.idx.ml    1472064.736895  4259.263105
+MSEI_307.trim.bt2.bam.out.saf.idx.ml    1447342.972267  4228.027733
+MSEI_308.trim.bt2.bam.out.saf.idx.ml    1396339.307647  3709.692353
+MSEI_310.trim.bt2.bam.out.saf.idx.ml    760008.151898   1361.848102
+MSEI_311.trim.bt2.bam.out.saf.idx.ml    1379399.031158  3794.968842
+MSEI_313.trim.bt2.bam.out.saf.idx.ml    1443830.646027  3938.353973
+MSEI_316.trim.bt2.bam.out.saf.idx.ml    1405501.148793  3792.851207
+MSEI_319.trim.bt2.bam.out.saf.idx.ml    1460746.859925  4105.140075
+MSEI_321.trim.bt2.bam.out.saf.idx.ml    1487701.440203  4046.559797
+MSEI_351.trim.bt2.bam.out.saf.idx.ml    1254058.647356  3284.352644
+MSEI_377.trim.bt2.bam.out.saf.idx.ml    1467909.594087  4195.405913
+MSEI_378.trim.bt2.bam.out.saf.idx.ml    1502528.144051  4206.855949
+MSEO_116.trim.bt2.bam.out.saf.idx.ml    1203800.383857  3216.616143
+MSEO_180.trim.bt2.bam.out.saf.idx.ml    1095407.114358  2826.885642
+MSEO_597.trim.bt2.bam.out.saf.idx.ml    1156445.702572  3243.297428
+MSEO_600.trim.bt2.bam.out.saf.idx.ml    1580554.743702  4344.256298
+MSEO_601.trim.bt2.bam.out.saf.idx.ml    1474051.930524  4042.069476
+MSEO_604.trim.bt2.bam.out.saf.idx.ml    1515998.576870  4144.423130
+MSEO_607.trim.bt2.bam.out.saf.idx.ml    1575812.953898  4397.046102
+MSEO_608.trim.bt2.bam.out.saf.idx.ml    1527319.662489  4365.337511
+MSEO_609.trim.bt2.bam.out.saf.idx.ml    1455593.383202  4212.616798
+MSEO_611.trim.bt2.bam.out.saf.idx.ml    1408720.459266  3984.540734
+MSEO_612.trim.bt2.bam.out.saf.idx.ml    1518129.210309  4307.789691
+MSEO_613.trim.bt2.bam.out.saf.idx.ml    1469837.079895  4246.920105
+MSEO_614.trim.bt2.bam.out.saf.idx.ml    934085.325587   2966.674413
+MSEO_614d.trim.bt2.bam.out.saf.idx.ml   993044.819411   2477.180589
+MSEO_615.trim.bt2.bam.out.saf.idx.ml    1500015.079238  4095.920762
+MSEO_616.trim.bt2.bam.out.saf.idx.ml    1266431.787365  3268.212635
+MSEO_617.trim.bt2.bam.out.saf.idx.ml    1353039.843177  3608.156823
+MSEO_619.trim.bt2.bam.out.saf.idx.ml    1425252.519812  3933.480188
+MSEO_619d.trim.bt2.bam.out.saf.idx.ml   1405753.835807  3822.164193
+MSEO_626.trim.bt2.bam.out.saf.idx.ml    1398711.757919  3813.242081
+MSEO_627.trim.bt2.bam.out.saf.idx.ml    1375282.752708  3752.247292
+MSEO_630.trim.bt2.bam.out.saf.idx.ml    1505550.776041  4052.223959
+MSEO_632.trim.bt2.bam.out.saf.idx.ml    1154543.161074  3152.838926
+MSEO_633.trim.bt2.bam.out.saf.idx.ml    1414073.107738  3971.892262
+TI_380.trim.bt2.bam.out.saf.idx.ml      1498027.318283  4236.681717
+TI_453.trim.bt2.bam.out.saf.idx.ml      1318718.843458  3726.156542
+TI_454.trim.bt2.bam.out.saf.idx.ml      1462464.143983  4125.856017
+TI_455.trim.bt2.bam.out.saf.idx.ml      1346996.346344  3987.653656
+TI_505.trim.bt2.bam.out.saf.idx.ml      1380339.627174  4060.372826
+TI_510.trim.bt2.bam.out.saf.idx.ml      1517789.862753  4531.137247
+TI_511.trim.bt2.bam.out.saf.idx.ml      1457862.679973  4207.320027
+TI_512.trim.bt2.bam.out.saf.idx.ml      1416463.083811  3933.916189
+TI_513.trim.bt2.bam.out.saf.idx.ml      1331779.675104  3785.324896
+TI_516.trim.bt2.bam.out.saf.idx.ml      1484892.800574  4255.199426
+TI_517.trim.bt2.bam.out.saf.idx.ml      1515607.671423  4397.328577
+TI_517d.trim.bt2.bam.out.saf.idx.ml     1356591.584280  3870.415720
+TI_524.trim.bt2.bam.out.saf.idx.ml      1547544.116921  4367.883079
+TI_525.trim.bt2.bam.out.saf.idx.ml      1457486.051113  4138.948887
+TI_526.trim.bt2.bam.out.saf.idx.ml      1471415.138909  4180.861091
+TI_527.trim.bt2.bam.out.saf.idx.ml      1487448.847158  4250.152842
+TI_530.trim.bt2.bam.out.saf.idx.ml      1484624.379076  4265.620924
+TI_533.trim.bt2.bam.out.saf.idx.ml      1573316.341221  4708.658779
+TI_535.trim.bt2.bam.out.saf.idx.ml      1476405.534830  4192.465170
+TI_537.trim.bt2.bam.out.saf.idx.ml      1523971.301521  4305.698479
+TI_539.trim.bt2.bam.out.saf.idx.ml      1509911.259482  4313.740518
+TI_540.trim.bt2.bam.out.saf.idx.ml      1549469.302103  4468.697897
+TI_542.trim.bt2.bam.out.saf.idx.ml      1254068.836073  3697.163927
+TI_542d.trim.bt2.bam.out.saf.idx.ml     988521.914947   2772.085053
+TI_544.trim.bt2.bam.out.saf.idx.ml      1393549.197663  3991.802337
+TI_545.trim.bt2.bam.out.saf.idx.ml      1374892.305601  3943.694399
+TO_381.trim.bt2.bam.out.saf.idx.ml      1469727.761963  4231.238037
+TO_382.trim.bt2.bam.out.saf.idx.ml      1405285.350202  3907.649798
+TO_384.trim.bt2.bam.out.saf.idx.ml      1480875.133275  4406.866725
+TO_386.trim.bt2.bam.out.saf.idx.ml      1489458.186241  4364.813759
+TO_389.trim.bt2.bam.out.saf.idx.ml      1565590.035328  4426.964672
+TO_391.trim.bt2.bam.out.saf.idx.ml      1517698.985355  4298.014645
+TO_393.trim.bt2.bam.out.saf.idx.ml      1546883.716479  4440.283521
+TO_394.trim.bt2.bam.out.saf.idx.ml      1453139.289657  4103.710343
+TO_397.trim.bt2.bam.out.saf.idx.ml      1585732.085634  4502.914366
+TO_397d.trim.bt2.bam.out.saf.idx.ml     1495257.611197  4251.388803
+TO_400.trim.bt2.bam.out.saf.idx.ml      1460673.808352  4198.191648
+TO_402.trim.bt2.bam.out.saf.idx.ml      1414015.952035  3987.047965
+TO_405.trim.bt2.bam.out.saf.idx.ml      1356194.861698  3825.138302
+TO_408.trim.bt2.bam.out.saf.idx.ml      1566929.337506  4489.662494
+TO_409.trim.bt2.bam.out.saf.idx.ml      1547992.760793  4282.239207
+TO_410.trim.bt2.bam.out.saf.idx.ml      1551580.956164  4447.043836
+TO_411.trim.bt2.bam.out.saf.idx.ml      1533683.082938  4432.917062
+TO_414.trim.bt2.bam.out.saf.idx.ml      1438865.516110  4231.483890
+TO_416.trim.bt2.bam.out.saf.idx.ml      880706.782828   2121.217172
+TO_418.trim.bt2.bam.out.saf.idx.ml      1417370.335394  3968.664606
+TO_421.trim.bt2.bam.out.saf.idx.ml      1427430.253094  4058.746906
+TO_422.trim.bt2.bam.out.saf.idx.ml      1472921.427464  4192.572536
+TO_422d.trim.bt2.bam.out.saf.idx.ml     1474804.793556  4176.206444
+TO_425.trim.bt2.bam.out.saf.idx.ml      1494147.059631  4255.940369
+TO_427.trim.bt2.bam.out.saf.idx.ml      1474303.943284  4260.056716
+TO_429.trim.bt2.bam.out.saf.idx.ml      1171109.590877  3143.409123
+est.ml                                  132945.925885   377.074115
+est_51.ml                               1231700.318346  3625.681654
+MNWI_51.out.saf.idx.ml                  1101819.363963  3422.636037
+MNWI_51.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_53.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_55.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_56.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_57.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_58.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_59.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_62.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_63.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_65.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_69.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_70.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_71.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_72.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_76.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_87.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_89.trim.bt2.bam.out.saf.idx.ml                     
+MNWI_98.trim.bt2.bam.out.saf.idx.ml                     
+MNWO_104.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_111.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_113.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_115.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_115d.trim.bt2.bam.out.saf.idx.ml                   
+MNWO_115dd.trim.bt2.bam.out.saf.idx.ml                  
+MNWO_117.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_119.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_125.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_130.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_156.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_157.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_157d.trim.bt2.bam.out.saf.idx.ml                   
+MNWO_158.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_159.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_172.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_173.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_174.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_174d.trim.bt2.bam.out.saf.idx.ml                   
+MNWO_175.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_177.trim.bt2.bam.out.saf.idx.ml                    
+MNWO_178.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_276.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_277.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_297.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_298.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_300.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_301.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_303.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_304.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_305.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_307.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_308.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_310.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_311.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_313.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_316.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_319.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_321.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_351.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_377.trim.bt2.bam.out.saf.idx.ml                    
+MSEI_378.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_116.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_180.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_597.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_600.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_601.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_604.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_607.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_608.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_609.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_611.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_612.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_613.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_614.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_614d.trim.bt2.bam.out.saf.idx.ml                   
+MSEO_615.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_616.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_617.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_619.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_619d.trim.bt2.bam.out.saf.idx.ml                   
+MSEO_626.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_627.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_630.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_632.trim.bt2.bam.out.saf.idx.ml                    
+MSEO_633.trim.bt2.bam.out.saf.idx.ml                    
+TI_380.trim.bt2.bam.out.saf.idx.ml                      
+TI_453.trim.bt2.bam.out.saf.idx.ml                      
+TI_454.trim.bt2.bam.out.saf.idx.ml                      
+TI_455.trim.bt2.bam.out.saf.idx.ml                      
+TI_505.trim.bt2.bam.out.saf.idx.ml                      
+TI_510.trim.bt2.bam.out.saf.idx.ml                      
+TI_511.trim.bt2.bam.out.saf.idx.ml                      
+TI_512.trim.bt2.bam.out.saf.idx.ml                      
+TI_513.trim.bt2.bam.out.saf.idx.ml                      
+TI_516.trim.bt2.bam.out.saf.idx.ml                      
+TI_517.trim.bt2.bam.out.saf.idx.ml                      
+TI_517d.trim.bt2.bam.out.saf.idx.ml                     
+TI_524.trim.bt2.bam.out.saf.idx.ml                      
+TI_525.trim.bt2.bam.out.saf.idx.ml                      
+TI_526.trim.bt2.bam.out.saf.idx.ml                      
+TI_527.trim.bt2.bam.out.saf.idx.ml                      
+TI_530.trim.bt2.bam.out.saf.idx.ml                      
+TI_533.trim.bt2.bam.out.saf.idx.ml                      
+TI_535.trim.bt2.bam.out.saf.idx.ml                      
+TI_537.trim.bt2.bam.out.saf.idx.ml                      
+TI_539.trim.bt2.bam.out.saf.idx.ml                      
+TI_540.trim.bt2.bam.out.saf.idx.ml                      
+TI_542.trim.bt2.bam.out.saf.idx.ml                      
+TI_542d.trim.bt2.bam.out.saf.idx.ml                     
+TI_544.trim.bt2.bam.out.saf.idx.ml                      
+TI_545.trim.bt2.bam.out.saf.idx.ml                      
+TO_381.trim.bt2.bam.out.saf.idx.ml                      
+TO_382.trim.bt2.bam.out.saf.idx.ml                      
+TO_384.trim.bt2.bam.out.saf.idx.ml                      
+TO_386.trim.bt2.bam.out.saf.idx.ml                      
+TO_389.trim.bt2.bam.out.saf.idx.ml                      
+TO_391.trim.bt2.bam.out.saf.idx.ml                      
+TO_393.trim.bt2.bam.out.saf.idx.ml                      
+TO_394.trim.bt2.bam.out.saf.idx.ml                      
+TO_397.trim.bt2.bam.out.saf.idx.ml                      
+TO_397d.trim.bt2.bam.out.saf.idx.ml                     
+TO_400.trim.bt2.bam.out.saf.idx.ml                      
+TO_402.trim.bt2.bam.out.saf.idx.ml                      
+TO_405.trim.bt2.bam.out.saf.idx.ml                      
+TO_408.trim.bt2.bam.out.saf.idx.ml                      
+TO_409.trim.bt2.bam.out.saf.idx.ml                      
+TO_410.trim.bt2.bam.out.saf.idx.ml                      
+TO_411.trim.bt2.bam.out.saf.idx.ml                      
+TO_414.trim.bt2.bam.out.saf.idx.ml                      
+TO_416.trim.bt2.bam.out.saf.idx.ml                      
+TO_418.trim.bt2.bam.out.saf.idx.ml                      
+TO_421.trim.bt2.bam.out.saf.idx.ml                      
+TO_422.trim.bt2.bam.out.saf.idx.ml                      
+TO_422d.trim.bt2.bam.out.saf.idx.ml                     
+TO_425.trim.bt2.bam.out.saf.idx.ml                      
+TO_427.trim.bt2.bam.out.saf.idx.ml                      
+TO_429.trim.bt2.bam.out.saf.idx.ml                      
+est.ml                                                  
+est_51.ml                                               
+round2_51.ml                                            
