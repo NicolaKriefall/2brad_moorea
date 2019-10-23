@@ -135,12 +135,71 @@ grep -h CV done_*.out
 # scp the *.Q and inds2pops files to laptop, plot it in R:
 # use part3_plotting_popstruct.R to plot (will require minor editing - population names)
 
-# scp *Mat, *qopt and bams files to laptop, use 
+#### Fst things
 
-# relatedness (must run ANGSD with option '-doGlf 3' to make this work)
-# (column "rab" in the result is relatedness coefficient, Fa and Fb are individual inbreeding coefficients):
-zcat myresult.mafs.gz | cut -f5 |sed 1d >freq
-NIND=`cat bams | wc -l`
-ngsRelate -f freq -g myresult.glf.gz -n $NIND -z bams >relatedness
+export GENOME_REF=./Amil.fasta
 
-bads=c("K4","O5","K211","K212","K210","K213","K219")
+# per each population, generate saf.idx file 
+
+#ST_J 
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 30 -minQ 30 -minInd 38 -dosnpstat 1 -doHWE 1 -hwe_pval 1e-5 -sb_pval 1e-5 -hetbias_pval 1e-5"
+TODO="-doSaf 1 -doMajorMinor 1"
+echo "angsd -b ST_J -GL 1 -anc $GENOME_REF -nInd 48 $FILTERS $TODO -P 1 -out STJ_freq" > freq
+ls5_launcher_creator.py -j freq -n freq -l allele_freq -t 2:00:00 -w 1 -A tagmap 
+sbatch allele_freq
+
+
+#ST_A  
+FILTERS="-uniqueOnly 1 -remove_bads 1 -minMapQ 30 -minQ 30 -minInd 27 -dosnpstat 1 -doHWE 1 -hwe_pval 1e-5 -sb_pval 1e-5 -hetbias_pval 1e-5"
+TODO="-doSaf 1 -doMajorMinor 1"
+echo "angsd -b ST_A -GL 1 -anc $GENOME_REF -nInd 34 $FILTERS $TODO -P 1 -out STA_freq" > freq2
+ls5_launcher_creator.py -j freq2 -n freq2 -l allele_freq2 -t 2:00:00 -w 1 -A tagmap 
+sbatch allele_freq2
+
+#calculate the 2dsfs prior 
+
+echo "realSFS STA_freq.saf.idx STA_freq.saf.idx > ST_AJ.ml" > sfs 
+ls5_launcher_creator.py -j sfs -n sfs -l sfs_1 -t 1:00:00 -w 1 -A tagmap 
+
+
+#####	prepare the fst for easy window analysis etc 	#########
+
+echo "realSFS fst index STJ_freq.saf.idx STA_freq.saf.idx -sfs ST.ml -fstout SThere" > here
+ls5_launcher_creator.py -j here -n here -l hereST -t 1:00:00 -w 1 -A tagmap 
+
+
+#####    getting the global Fst estimate    #######
+
+realSFS fst stats SThere.fst.idx
+
+
+
+#### calculating theta #### 
+
+echo "realSFS STJ_freq_fold.saf.idx > stj.sfs" > sfs
+ls5_launcher_creator.py -j sfs -n sfs -l sfs_job -t 1:00:00 -w 1 -A tagmap 
+
+echo "realSFS STA_freq_fold.saf.idx > sta.sfs" > sfs
+ls5_launcher_creator.py -j sfs -n sfs -l sfs_job -t 1:00:00 -w 1 -A tagmap 
+
+
+## if your reference genome is not the same as your study species, then use -anc for the genome ref 
+
+TODO="-doSaf 1 -doThetas 1 -fold 1" 
+echo "angsd -b ST_J -out STJ_theta -pest stj.sfs -anc $GENOME_REF $TODO -GL 1"> theta
+ls5_launcher_creator.py -j theta -n theta -l thetajob -t 1:00:00 -w 1 -A tagmap 
+
+TODO="-doSaf 1 -doThetas 1 -fold 1" 
+echo "angsd -b ST_A -out STA_theta -pest sta.sfs -anc $GENOME_REF $TODO -GL 1"> theta
+ls5_launcher_creator.py -j theta -n theta -l thetajob -t 1:00:00 -w 1 -A tagmap 
+
+ 
+#global theta estimate for every Chromosome/scaffold
+#thetaStat is an angsd subprogram, so it should be installed already with angsd 
+
+thetaStat do_stat STA_theta.thetas.idx
+
+## sliding window analysis of theta with 50000 kb window with 10000 kb step size if interested in regions of high/low diversity
+
+thetaStat do_stat STJ_theta.thetas.idx -win 50000 -step 10000  -outnames STJ.theta
+thetaStat do_stat STA_theta.thetas.idx -win 50000 -step 10000  -outnames STA.theta

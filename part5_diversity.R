@@ -1,12 +1,10 @@
-df <- read.table("part5_het_out.txt")
-df$het <- df$V3/(df$V2+df$V3)
+df <- read.table("~/Google Drive/Moorea/2brad_moorea/part5_het_out.txt") #read in data
+df$het <- df$V3/(df$V2+df$V3) #heterozygosity calculations
+df$V1 <- sub("TO","TNWO",df$V1) #just renaming some sites
+df$V1 <- sub("TI","TNWI",df$V1) #just renaming some sites
 df$site <- substr(df$V1, 0, 4)
-df[86:137,5] <- substr(df[86:137,5], 0, 2)
+df$site <- as.factor(df$site)
 str(df)
-nocrap <- df[2:137,]
-hetz <- nocrap$het
-sitez <- nocrap$site
-dfmaybe <- data.frame(sitez,hetz)
-plot(hetz~sitez,data=dfmaybe)
-a1 <- aov(hetz~sitez,data=dfmaybe)
-summary(a1)
+plot(het~site,data=df)
+
+

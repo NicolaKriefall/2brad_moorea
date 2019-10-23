@@ -3,6 +3,7 @@
 library(vcfR)
 library(adegenet)
 library(vegan) 
+library(stringr)
 
 gl=vcfR2genlight(read.vcfR("~/Google Drive/Moorea/Host/donresult.vcf.gz")) #output from angsd
 
@@ -40,11 +41,16 @@ ordiellipse(pca$scores[,1:2],pops$V2,label=T,draw="polygon",col="grey90")
 #colors=as.numeric(as.numeric(as.factor(levels(pop(gl))))) # or use your own colors for populations
 #s.class(pca2$scores[],pop(gl2),col=transp(colors,0.5),cstar=1,cellipse=1,clabel=1,axesell=F,grid=F,cpoint=2)
 
-#stats
+#### PCA stats ####
 site <- pops$V2
+site <- sub("TO","TNWO",site) #just had to make all sites have 4 characters so I could look at some other variables
+site <- sub("TI","TNWI",site)
+zone <- str_sub(site,4,4)
+realsite <- str_sub(site,1,3)
 scores <- pca$scores
-adonis(scores ~ site,method='manhattan')
+adonis(scores ~ zone, strata=realsite, perm=999,method="euclidian")
 #this example helped me figure out how to do this: https://stackoverflow.com/questions/43736314/error-in-g-that-non-conformable-arrays
+#also this: https://rdrr.io/rforge/vegan/man/adonis.html#heading-1
 
 # Call:
 #   adonis(formula = scores ~ site, method = "manhattan") 
@@ -62,7 +68,6 @@ adonis(scores ~ site,method='manhattan')
 #ggplot pca
 library(ggplot2)
 #install.packages("ggrepel")
-library(ggrepel)
 
 #adding zone variable in addition to site
 zones <- read.table("~/Google Drive/Moorea/Host/part3input_inds2pops_zone.txt") #2nd column is my reef zones instead of sites
@@ -221,3 +226,40 @@ source("~/Google Drive/Moorea/Host/plot_admixture_v4_function.R")
 
 quartz()
 ords=plotAdmixture(data=tbl,npops=npops,angle=0,vshift=0,hshift=0)
+
+#### FST ####
+#good webiste on calculating this stuff (by hand though):
+#http://www.uwyo.edu/dbmcd/popecol/maylects/fst.html
+
+library(vcfR)
+library(hierfstat)
+library(adegenet)
+
+vcf <- read.vcfR("~/Google Drive/Moorea/Host/donresult.vcf.gz")
+genind <- vcfR2genind(vcf)
+pop(genind) <- c(rep("MNWI",13),rep("MNWO",15),rep("MSEI",18),rep("MSEO",21),rep("TI",24),rep("TO",23))
+
+fstat(genind, fstonly = FALSE, pop=NULL) #pop=null means you inherit the pops already there 
+pairwise.fst(genind, pop = NULL, res.type = c("dist", "matrix"))
+
+test.between(genind,test.lev="Locality",rand.unit="Patch")
+
+# 1          2          3          4          5
+# 2 0.01955097                                            
+# 3 0.01797238 0.01623331                                 
+# 4 0.01732276 0.01493712 0.01528038                      
+# 5 0.01559150 0.01361887 0.01387200 0.01315708           
+# 6 0.01580877 0.01421282 0.01412182 0.01329455 0.01175710
+
+#### FST using stampp ####
+#install.packages("StAMPP")
+library(StAMPP)
+
+#assigning populations
+pop(gl) <- c(rep("MNWI",13),rep("MNWO",15),rep("MSEI",18),rep("MSEO",21),rep("TI",24),rep("TO",23))
+#fst calculations
+sfst <- stamppFst(gl, nboots = 100, percent = 95, nclusters = 1)
+#nboots = number of bootstraps to do
+#percent = percentile to calculate p values around
+#nclusters = number of threads to use
+
