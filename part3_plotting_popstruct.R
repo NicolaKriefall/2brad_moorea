@@ -239,6 +239,11 @@ vcf <- read.vcfR("~/Google Drive/Moorea/Host/donresult.vcf.gz")
 genind <- vcfR2genind(vcf)
 pop(genind) <- c(rep("MNWI",13),rep("MNWO",15),rep("MSEI",18),rep("MSEO",21),rep("TI",24),rep("TO",23))
 
+basic.stats(genind)
+# $overall
+# Ho     Hs     Ht    Dst    Htp   Dstp    Fst   Fstp    Fis   Dest 
+# 0.3114 0.3383 0.3386 0.0003 0.3386 0.0003 0.0007 0.0009 0.0795 0.0005 
+
 fstat(genind, fstonly = FALSE, pop=NULL) #pop=null means you inherit the pops already there 
 pairwise.fst(genind, pop = NULL, res.type = c("dist", "matrix"))
 
@@ -250,16 +255,3 @@ test.between(genind,test.lev="Locality",rand.unit="Patch")
 # 4 0.01732276 0.01493712 0.01528038                      
 # 5 0.01559150 0.01361887 0.01387200 0.01315708           
 # 6 0.01580877 0.01421282 0.01412182 0.01329455 0.01175710
-
-#### FST using stampp ####
-#install.packages("StAMPP")
-library(StAMPP)
-
-#assigning populations
-pop(gl) <- c(rep("MNWI",13),rep("MNWO",15),rep("MSEI",18),rep("MSEO",21),rep("TI",24),rep("TO",23))
-#fst calculations
-sfst <- stamppFst(gl, nboots = 100, percent = 95, nclusters = 1)
-#nboots = number of bootstraps to do
-#percent = percentile to calculate p values around
-#nclusters = number of threads to use
-

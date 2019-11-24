@@ -12,13 +12,12 @@ realSFS MNWI_51.out.saf.idx > est_51.ml
 #[column 2/sum of both columns]
 
 #now doing it for all my samples:
-#updated
 for file in `cat bams_no8`
 do
 	echo "angsd -i $file -anc Amil.fasta -dosaf 1 -fold 1 -minQ 20 -minmapq 30 -gl 1 -out $file.out" >> het.sh
 done
 
-#check out levels of polymorphism vs. levels of heterozygosity
+#check out levels of polymorphism vs. levels of heterozygosity?
 
 #now submitting het.sh, adding this to the top: 
 #!/bin/bash
